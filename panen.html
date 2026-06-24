@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panen - SIM Perkebunan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- ApexCharts for Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <!-- Custom Style CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#f8fafc] text-gray-800 font-sans flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-[260px] bg-[#113222] text-white flex flex-col h-full flex-shrink-0 relative z-20">
+        <div class="px-6 pt-8 pb-6">
+            <h1 class="text-2xl font-bold leading-tight font-display tracking-tight text-white">Plantation<br>Management</h1>
+            <p class="text-[10px] text-[#8cedaf] font-mono tracking-widest uppercase mt-1">Agri-Enterprise Admin</p>
+        </div>
+        
+        <nav class="px-4 space-y-1 sidebar-scroll flex-1 overflow-y-auto">
+            <a href="dashboard.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-border-all w-7 text-base"></i> Dashboard
+            </a>
+            <a href="karyawan.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-user-group w-7 text-base"></i> Karyawan
+            </a>
+            <a href="lahan.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-map-location-dot w-7 text-base"></i> Lahan
+            </a>
+            <a href="panen.html" class="flex items-center px-4 py-3 text-sm font-bold bg-[#8cedaf] text-[#113222] rounded-xl shadow-md transition-all duration-200">
+                <i class="fa-solid fa-tractor w-7 text-base"></i> Panen
+            </a>
+            <a href="absensi.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-regular fa-calendar-check w-7 text-base"></i> Absensi
+            </a>
+            <a href="gudang.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-box-archive w-7 text-base"></i> Gudang
+            </a>
+            <a href="distribusi.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-truck-fast w-7 text-base"></i> Distribusi
+            </a>
+            <a href="penggajian.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-money-bill-wave w-7 text-base"></i> Penggajian
+            </a>
+            <a href="keuangan.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-wallet w-7 text-base"></i> Keuangan
+            </a>
+        </nav>
+
+        <div class="px-4 py-4 border-t border-[#1a3f2d] space-y-2">
+            <button onclick="printReport('Panen')" class="w-full flex items-center px-4 py-2.5 text-xs font-bold bg-[#1a3f2d] text-[#8cedaf] hover:bg-[#22543d] rounded-xl transition-all duration-200 justify-center gap-2">
+                <i class="fa-solid fa-file-invoice"></i> Quick Report
+            </button>
+            <button onclick="triggerFeatureInProgress('Settings')" class="w-full flex items-center px-4 py-2 text-xs font-semibold text-[#94b5a2] hover:text-white rounded-lg hover:bg-[#1a3f2d] transition-all duration-150">
+                <i class="fa-solid fa-gear w-6 text-sm"></i> Settings
+            </button>
+            <button onclick="logout()" class="w-full flex items-center px-4 py-2 text-xs font-semibold text-rose-300 hover:text-rose-100 rounded-lg hover:bg-rose-950/20 transition-all duration-150">
+                <i class="fa-solid fa-arrow-right-from-bracket w-6 text-sm"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- HEADER -->
+        <header class="h-[72px] bg-white flex items-center justify-between px-8 border-b border-slate-100 flex-shrink-0 relative z-10">
+            <div class="flex items-center gap-2">
+                <div class="text-[#113222] text-xl font-bold tracking-tight font-display">SIM Perkebunan</div>
+            </div>
+            
+            <!-- Search bar -->
+            <div class="relative w-80 hidden md:block">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="searchPanen" oninput="renderPanen()" placeholder="Search harvest logs..." class="w-full bg-[#f1f5f9] text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-700/50 focus:bg-white transition-all">
+            </div>
+
+            <!-- Profile and actions -->
+            <div class="flex items-center gap-4">
+                <button onclick="triggerFeatureInProgress('Notifikasi')" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-50 relative"><i class="fa-regular fa-bell"></i><span class="absolute top-2 right-2 w-1.5 h-1.5 bg-emerald-500 rounded-full"></span></button>
+                <button onclick="triggerFeatureInProgress('Bantuan')" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-50"><i class="fa-regular fa-circle-question"></i></button>
+                <div class="w-px h-6 bg-gray-200"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <div class="text-xs font-bold text-gray-800 leading-tight profile-user-name">Agri-Enterprise Admin</div>
+                        <div class="text-[9px] text-gray-400 font-bold tracking-wider profile-user-title uppercase mt-0.5">Admin</div>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-200 overflow-hidden flex items-center justify-center font-bold text-emerald-800 text-xs shadow-sm">
+                        <img src="assets/login_plantation.png" alt="Avatar" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTAINER -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-6">
+            
+            <!-- Header Row -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight font-display">Log Panen Perkebunan</h2>
+                    <p class="text-xs text-gray-400 font-medium mt-0.5">Monitoring real-time hasil bumi dan efisiensi lahan.</p>
+                </div>
+                <div class="flex gap-3">
+                    <select id="filterPanenKomoditas" onchange="renderPanen()" class="bg-white border border-slate-200 text-gray-700 font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm focus:outline-none cursor-pointer">
+                        <option>Semua Komoditas</option>
+                        <option>Kelapa Sawit</option>
+                        <option>Karet</option>
+                        <option>Kopi Arabika</option>
+                    </select>
+                    <button onclick="openModal('modalPanen')" class="bg-[#113222] hover:bg-[#1a3f2d] text-[#8cedaf] font-bold text-xs px-4 py-2.5 rounded-xl shadow-md flex items-center gap-1.5 transition-all duration-200 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-circle-plus text-sm"></i> + CATAT PANEN BARU
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- TABLE COLUMN -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden relative">
+                        <div class="p-6 border-b border-slate-50 flex items-center justify-between">
+                            <h3 class="font-bold text-gray-800 text-base flex items-center gap-2"><i class="fa-solid fa-list-check text-emerald-700"></i> Entri Log Terkini</h3>
+                            <span class="bg-emerald-50 text-emerald-700 text-[9px] font-bold px-2 py-0.5 rounded tracking-wider">HARI INI: 12 Entri</span>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+                                        <th class="px-6 py-3">Waktu</th>
+                                        <th class="px-6 py-3">Blok Lahan</th>
+                                        <th class="px-6 py-3">Komoditas</th>
+                                        <th class="px-6 py-3">Berat (KG)</th>
+                                        <th class="px-6 py-3">Status</th>
+                                        <th class="px-6 py-3">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="panenTableBody" class="divide-y divide-slate-100 text-sm font-medium">
+                                    <!-- Populated dynamically via script.js -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table Footer Pagination -->
+                        <div class="p-6 border-t border-slate-50 flex items-center justify-between text-xs text-gray-400 font-semibold">
+                            <span id="panenPaginationText">Menampilkan 1-7 dari 124 entri</span>
+                            <div id="panenPaginationControls" class="flex items-center gap-1.5 font-bold">
+                                <!-- Dynamic Controls -->
+                            </div>
+                        </div>
+
+                        <!-- Floating Action Button in Table Card -->
+                        <div class="absolute bottom-[90px] right-6">
+                            <button onclick="openModal('modalPanen')" class="w-10 h-10 bg-[#113222] hover:bg-[#1a3f2d] text-white rounded-full flex items-center justify-center text-lg shadow-lg hover:scale-105 duration-200 cursor-pointer fab-btn">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR COLUMN -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Tren Hasil Bumi Line Chart -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-gray-800 text-sm">Tren Hasil Bumi</h3>
+                                <p class="text-[9px] text-gray-400 font-bold uppercase mt-0.5 tracking-wider">Fluktuasi Bulanan (Ton)</p>
+                            </div>
+                            <span class="text-[#10b981] text-xs font-bold bg-emerald-50 px-1.5 py-0.5 rounded flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +12.4%
+                            </span>
+                        </div>
+                        
+                        <div id="panenTrenChart"></div>
+                    </div>
+
+                    <!-- Metrics cards -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Rata-Rata Yield</span>
+                            <div class="text-2xl font-extrabold text-gray-800 mt-1">4.2</div>
+                            <span class="text-xs font-semibold text-emerald-600 flex items-center gap-1 mt-1.5">
+                                <i class="fa-solid fa-arrow-trend-up"></i> +0.3 kg/pohon
+                            </span>
+                        </div>
+
+                        <div class="bg-white p-5 border border-slate-100 rounded-2xl shadow-sm">
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Luas Panen</span>
+                            <div class="text-2xl font-extrabold text-[#113222] mt-1">125</div>
+                            <span class="text-[10px] font-bold text-gray-400 block mt-1.5">Hektar Aktif</span>
+                        </div>
+                    </div>
+
+                    <!-- Analisa Cepat -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-bold text-gray-800 text-sm">Analisa Cepat</h3>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-xs text-emerald-700 shadow-inner"><i class="fa-solid fa-bolt"></i></div>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-relaxed font-medium mb-6">Mulai perhitungan efisiensi pemanenan berdasarkan log minggu ini.</p>
+                        
+                        <button onclick="printReport('Analisa Hasil Panen')" class="w-full bg-[#113222] hover:bg-[#1a3f2d] text-[#8cedaf] font-bold text-xs py-3.5 rounded-xl shadow-md transition-all duration-200 flex items-center justify-center gap-1.5">
+                            GENERATE REPORT
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- RECORD HARVEST MODAL -->
+    <div id="modalPanen" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl p-8 border border-slate-100 shadow-2xl relative">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 font-display">Catat Log Panen Baru</h3>
+            <form onsubmit="addPanen(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1.5">Blok Lahan</label>
+                    <select id="addPanenBlock" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700 font-bold text-gray-700">
+                        <option>Blok A-12</option>
+                        <option>Blok A-02</option>
+                        <option>Blok B-03</option>
+                        <option>Blok B-09</option>
+                        <option>Blok C-08</option>
+                        <option>Blok D-15</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">Komoditas</label>
+                        <select id="addPanenItem" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700">
+                            <option>Kelapa Sawit</option>
+                            <option>Karet</option>
+                            <option>Kopi Arabika</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">Status</label>
+                        <select id="addPanenStatus" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700">
+                            <option>VERIFIED</option>
+                            <option>PENDING</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1.5">Berat Hasil (KG)</label>
+                    <input type="number" id="addPanenWeight" required placeholder="Contoh: 1250" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700 font-bold">
+                </div>
+
+                <div class="flex gap-3 pt-4 border-t border-slate-100 mt-6">
+                    <button type="button" onclick="closeModal('modalPanen')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-gray-600 font-bold text-sm py-3 rounded-xl transition-colors">Batal</button>
+                    <button type="submit" class="flex-1 bg-[#113222] hover:bg-[#1a3f2d] text-[#8cedaf] font-bold text-sm py-3 rounded-xl shadow-md transition-colors">Simpan</button>
+                </div>
+            </form>
+            <button onclick="closeModal('modalPanen')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

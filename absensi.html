@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi - SIM Perkebunan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#f8fafc] text-gray-800 font-sans flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-[260px] bg-[#113222] text-white flex flex-col h-full flex-shrink-0 relative z-20">
+        <div class="px-6 pt-8 pb-6">
+            <h1 class="text-2xl font-bold leading-tight font-display tracking-tight text-white">Plantation<br>Management</h1>
+            <p class="text-[10px] text-[#8cedaf] font-mono tracking-widest uppercase mt-1">Agri-Enterprise Admin</p>
+        </div>
+        
+        <nav class="px-4 space-y-1 sidebar-scroll flex-1 overflow-y-auto">
+            <a href="dashboard.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-border-all w-7 text-base"></i> Dashboard
+            </a>
+            <a href="karyawan.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-user-group w-7 text-base"></i> Karyawan
+            </a>
+            <a href="lahan.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-map-location-dot w-7 text-base"></i> Lahan
+            </a>
+            <a href="panen.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-tractor w-7 text-base"></i> Panen
+            </a>
+            <a href="absensi.html" class="flex items-center px-4 py-3 text-sm font-bold bg-[#8cedaf] text-[#113222] rounded-xl shadow-md transition-all duration-200">
+                <i class="fa-regular fa-calendar-check w-7 text-base"></i> Absensi
+            </a>
+            <a href="gudang.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-box-archive w-7 text-base"></i> Gudang
+            </a>
+            <a href="distribusi.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-truck-fast w-7 text-base"></i> Distribusi
+            </a>
+            <a href="penggajian.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-money-bill-wave w-7 text-base"></i> Penggajian
+            </a>
+            <a href="keuangan.html" class="flex items-center px-4 py-3 text-sm font-semibold text-[#94b5a2] hover:bg-[#1a3f2d] hover:text-white rounded-xl transition-all duration-200">
+                <i class="fa-solid fa-wallet w-7 text-base"></i> Keuangan
+            </a>
+        </nav>
+
+        <div class="px-4 py-4 border-t border-[#1a3f2d] space-y-2">
+            <button onclick="printReport('Absensi')" class="w-full flex items-center px-4 py-2.5 text-xs font-bold bg-[#1a3f2d] text-[#8cedaf] hover:bg-[#22543d] rounded-xl transition-all duration-200 justify-center gap-2">
+                <i class="fa-solid fa-file-invoice"></i> Quick Report
+            </button>
+            <button onclick="triggerFeatureInProgress('Settings')" class="w-full flex items-center px-4 py-2 text-xs font-semibold text-[#94b5a2] hover:text-white rounded-lg hover:bg-[#1a3f2d] transition-all duration-150">
+                <i class="fa-solid fa-gear w-6 text-sm"></i> Settings
+            </button>
+            <button onclick="logout()" class="w-full flex items-center px-4 py-2 text-xs font-semibold text-rose-300 hover:text-rose-100 rounded-lg hover:bg-rose-950/20 transition-all duration-150">
+                <i class="fa-solid fa-arrow-right-from-bracket w-6 text-sm"></i> Logout
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- HEADER -->
+        <header class="h-[72px] bg-white flex items-center justify-between px-8 border-b border-slate-100 flex-shrink-0 relative z-10">
+            <div class="flex items-center gap-2">
+                <div class="text-[#113222] text-xl font-bold tracking-tight font-display">SIM Perkebunan</div>
+            </div>
+            
+            <!-- Search bar -->
+            <div class="relative w-80 hidden md:block">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </span>
+                <input type="text" id="searchAbsen" oninput="renderAbsensi()" placeholder="Search logs..." class="w-full bg-[#f1f5f9] text-xs rounded-xl pl-9 pr-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-emerald-700/50 focus:bg-white transition-all">
+            </div>
+
+            <!-- Profile and actions -->
+            <div class="flex items-center gap-4">
+                <button onclick="triggerFeatureInProgress('Notifikasi')" class="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-50 relative"><i class="fa-regular fa-bell"></i><span class="absolute top-2 right-2 w-1.5 h-1.5 bg-emerald-500 rounded-full"></span></button>
+                <div class="w-px h-6 bg-gray-200"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right">
+                        <div class="text-xs font-bold text-gray-800 leading-tight profile-user-name">Agri-Enterprise Admin</div>
+                        <div class="text-[9px] text-gray-400 font-bold tracking-wider profile-user-title uppercase mt-0.5">Admin</div>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-emerald-100 border border-emerald-200 overflow-hidden flex items-center justify-center font-bold text-emerald-800 text-xs shadow-sm">
+                        <img src="assets/login_plantation.png" alt="Avatar" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTAINER -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-6 relative">
+            
+            <!-- Header Row -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-gray-900 tracking-tight font-display">Daily Attendance Log</h2>
+                    <p class="text-xs text-gray-400 font-medium mt-0.5">Real-time status tracking for Block A-12 Sector.</p>
+                </div>
+                <div class="flex gap-3">
+                    <select id="filterAbsensiStatus" onchange="renderAbsensi()" class="bg-white border border-slate-200 text-gray-700 font-bold text-xs px-4 py-2.5 rounded-xl shadow-sm focus:outline-none cursor-pointer">
+                        <option>Semua Status</option>
+                        <option>HADIR</option>
+                        <option>SAKIT</option>
+                        <option>IZIN</option>
+                        <option>ALPA</option>
+                    </select>
+                    <button onclick="exportToCSV('absensi', 'absensi_export.csv')" class="bg-white border border-slate-200 hover:bg-slate-50 text-gray-700 font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-download text-sm text-gray-500"></i> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- TABLE COLUMN -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-slate-50 border-b border-slate-100 text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+                                        <th class="px-6 py-4">Employee</th>
+                                        <th class="px-6 py-4">Position</th>
+                                        <th class="px-6 py-4">Check In</th>
+                                        <th class="px-6 py-4">Block</th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="absensiTableBody" class="divide-y divide-slate-100 text-sm font-medium">
+                                    <!-- Populated dynamically via script.js -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Table Footer Pagination -->
+                        <div class="p-6 border-t border-slate-50 flex items-center justify-between text-xs text-gray-400 font-semibold">
+                            <span id="absensiPaginationText">Showing 1-7 of 142 employees</span>
+                            <div id="absensiPaginationControls" class="flex items-center gap-1.5 font-bold">
+                                <!-- Dynamic Controls -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SIDEBAR COLUMN -->
+                <div class="lg:col-span-1 space-y-6">
+                    <!-- Quick Stats stack -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                        <div>
+                            <h3 class="font-bold text-gray-800 text-sm">Quick Stats</h3>
+                            <p class="text-[9px] text-gray-450 font-bold uppercase mt-0.5 tracking-wider">Live overview for Oct 24, 2023.</p>
+                        </div>
+                        
+                        <!-- HADIR Card -->
+                        <div class="border-l-4 border-emerald-500 bg-emerald-50/50 p-4 rounded-r-xl flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-7 h-7 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-xs shadow-inner"><i class="fa-solid fa-check"></i></div>
+                                <div>
+                                    <div class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">TOTAL HADIR</div>
+                                    <div class="text-xl font-extrabold text-gray-800 mt-0.5" id="statHadir">124</div>
+                                </div>
+                            </div>
+                            <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded flex items-center gap-0.5"><i class="fa-solid fa-arrow-trend-up"></i> +87%</span>
+                        </div>
+
+                        <!-- SAKIT Card -->
+                        <div class="border-l-4 border-yellow-500 bg-yellow-50/30 p-4 rounded-r-xl flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-7 h-7 bg-yellow-100 text-yellow-700 rounded-full flex items-center justify-center text-xs shadow-inner"><i class="fa-solid fa-briefcase-medical"></i></div>
+                                <div>
+                                    <div class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">SAKIT</div>
+                                    <div class="text-xl font-extrabold text-gray-800 mt-0.5" id="statSakit">08</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- IZIN Card -->
+                        <div class="border-l-4 border-blue-500 bg-blue-50/30 p-4 rounded-r-xl flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-7 h-7 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs shadow-inner"><i class="fa-regular fa-clipboard"></i></div>
+                                <div>
+                                    <div class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">IZIN</div>
+                                    <div class="text-xl font-extrabold text-gray-800 mt-0.5" id="statIzin">04</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ALPA Card -->
+                        <div class="border-l-4 border-red-500 bg-red-50/30 p-4 rounded-r-xl flex items-center justify-between shadow-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-7 h-7 bg-red-100 text-red-700 rounded-full flex items-center justify-center text-xs shadow-inner"><i class="fa-solid fa-xmark"></i></div>
+                                <div>
+                                    <div class="text-[9px] font-bold text-gray-400 uppercase tracking-wider">ALPA</div>
+                                    <div class="text-xl font-extrabold text-gray-800 mt-0.5" id="statAlpa">06</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EFFICIENCY INSIGHT -->
+                    <div class="bg-[#113222] p-6 rounded-2xl border border-emerald-950/20 text-white shadow-sm relative">
+                        <h4 class="text-[9px] font-bold text-emerald-300 uppercase tracking-wider font-mono">Efficiency Insight</h4>
+                        <p class="text-xs font-medium leading-relaxed mt-2 text-slate-100">Attendance is 4% higher than last Tuesday. Field operations are at peak capacity.</p>
+                        <div class="w-full bg-[#1a3f2d] rounded-full h-1.5 mt-4">
+                            <div class="bg-[#8cedaf] h-1.5 rounded-full" style="width: 80%"></div>
+                        </div>
+
+                        <!-- Floating Action Button at Bottom Right of Insight -->
+                        <div class="absolute -bottom-8 -right-2">
+                            <button onclick="openModal('modalAbsensi')" class="w-10 h-10 bg-[#113222] hover:bg-[#1a3f2d] text-white rounded-full flex items-center justify-center text-lg shadow-lg hover:scale-105 duration-200 cursor-pointer fab-btn border border-emerald-800">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- RECORD ATTENDANCE MODAL -->
+    <div id="modalAbsensi" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 items-center justify-center hidden">
+        <div class="bg-white w-full max-w-md rounded-3xl p-8 border border-slate-100 shadow-2xl relative">
+            <h3 class="text-xl font-bold text-gray-900 mb-6 font-display">Catat Kehadiran Baru</h3>
+            <form onsubmit="addAbsensi(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1.5">Nama Lengkap</label>
+                    <input type="text" id="addAbsenNama" required placeholder="Contoh: Budi Nugraha" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1.5">Jabatan / Posisi</label>
+                    <input type="text" id="addAbsenJabatan" required placeholder="Contoh: Harvester, Driver" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">Jam Masuk (Check-In)</label>
+                        <input type="text" id="addAbsenCheck" placeholder="Contoh: 07:15 AM" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 mb-1.5">Sektor / Blok</label>
+                        <input type="text" id="addAbsenBlok" placeholder="Contoh: A-12" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700 font-mono">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 mb-1.5">Status Kehadiran</label>
+                    <select id="addAbsenStatus" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-700">
+                        <option>HADIR</option>
+                        <option>SAKIT</option>
+                        <option>IZIN</option>
+                        <option>ALPA</option>
+                    </select>
+                </div>
+
+                <div class="flex gap-3 pt-4 border-t border-slate-100 mt-6">
+                    <button type="button" onclick="closeModal('modalAbsensi')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-gray-600 font-bold text-sm py-3 rounded-xl transition-colors">Batal</button>
+                    <button type="submit" class="flex-1 bg-[#113222] hover:bg-[#1a3f2d] text-[#8cedaf] font-bold text-sm py-3 rounded-xl shadow-md transition-colors">Simpan</button>
+                </div>
+            </form>
+            <button onclick="closeModal('modalAbsensi')" class="absolute top-6 right-6 text-gray-400 hover:text-gray-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

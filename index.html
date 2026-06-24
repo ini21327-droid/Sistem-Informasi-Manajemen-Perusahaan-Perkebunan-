@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SIM Perkebunan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Style CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body
+    class="bg-gradient-to-tr from-[#e8f5e9] via-[#f1f8e9] to-[#ffffff] h-screen w-screen flex items-center justify-center overflow-hidden">
+
+    <div class="relative w-full max-w-md px-4">
+        <!-- Decorative tilted photo card on top right -->
+        <div
+            class="absolute -top-12 -right-8 w-28 h-20 rounded-2xl overflow-hidden border-2 border-white shadow-2xl z-20 login-photo-tilted hidden sm:block">
+            <img src="assets/login_plantation.png" alt="Plantation Photo" class="w-full h-full object-cover">
+        </div>
+
+        <!-- Main Card -->
+        <div
+            class="bg-white/95 backdrop-blur-md px-8 py-10 rounded-3xl border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.06)] relative z-10 w-full">
+            <div class="text-center mb-8">
+                <!-- Tractor Logo -->
+                <div
+                    class="w-12 h-12 bg-[#113222] text-[#8cedaf] rounded-2xl flex items-center justify-center text-xl mx-auto mb-4 shadow-lg shadow-emerald-950/20">
+                    <i class="fa-solid fa-tractor"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-900 tracking-tight font-display">SIM Perkebunan</h1>
+                <p class="text-[9px] font-bold text-gray-400 mt-1.5 tracking-widest uppercase font-mono">Enterprise
+                    Management System</p>
+            </div>
+
+            <!-- Form Sections -->
+            <!-- Login Form Section -->
+            <div id="login-section" class="space-y-5 transition-all duration-300">
+                <div>
+                    <label
+                        class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" id="username" placeholder="Enter your employee ID"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-4 py-3 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider">Password</label>
+                        <a href="#" onclick="toggleCredentialsForm(true); return false;"
+                            class="text-[10px] font-bold text-emerald-600 hover:text-emerald-800 tracking-wider">Ubah Username/Password?</a>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="password" placeholder="••••••••"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-10 py-3 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium"
+                            onkeypress="if(event.key === 'Enter') login()">
+                        <span onclick="togglePasswordVisibility('password', this)"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 text-sm cursor-pointer hover:text-gray-600">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center pt-1">
+                    <input type="checkbox" id="remember"
+                        class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                    <label for="remember" class="ml-2 text-xs font-semibold text-gray-500 select-none">Stay logged in
+                        for 30 days</label>
+                </div>
+
+                <button onclick="login()"
+                    class="w-full bg-[#113222] hover:bg-[#19402c] text-white font-bold rounded-xl py-3.5 shadow-lg shadow-emerald-950/10 flex items-center justify-center gap-2 group transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 mt-6">
+                    Sign In to Dashboard <i
+                        class="fa-solid fa-arrow-right text-xs group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
+            </div>
+
+            <!-- Change Credentials Form Section (hidden by default) -->
+            <div id="change-credentials-section" class="hidden space-y-4 transition-all duration-300">
+                <div class="text-center -mt-2 mb-4">
+                    <h2 class="text-sm font-bold text-gray-700">Ubah Username & Password</h2>
+                    <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Verifikasi Kredensial
+                        Lama</p>
+                </div>
+
+                <!-- Username Lama -->
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Username
+                        Lama</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-regular fa-user"></i>
+                        </span>
+                        <input type="text" id="old-username" placeholder="Username saat ini"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-4 py-2.5 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium">
+                    </div>
+                </div>
+
+                <!-- Password Lama -->
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Password
+                        Lama</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="old-password" placeholder="••••••••"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-10 py-2.5 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium">
+                        <span onclick="togglePasswordVisibility('old-password', this)"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 text-sm cursor-pointer hover:text-gray-600">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border-t border-dashed border-slate-200 my-3"></div>
+
+                <div class="text-center mb-2">
+                    <p class="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">Kredensial Baru</p>
+                </div>
+
+                <!-- Username Baru -->
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Username
+                        Baru</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </span>
+                        <input type="text" id="new-username" placeholder="Username baru yang diinginkan"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-4 py-2.5 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium">
+                    </div>
+                </div>
+
+                <!-- Password Baru -->
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Password
+                        Baru</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-solid fa-key"></i>
+                        </span>
+                        <input type="password" id="new-password" placeholder="••••••••"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-10 py-2.5 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium">
+                        <span onclick="togglePasswordVisibility('new-password', this)"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 text-sm cursor-pointer hover:text-gray-600">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Konfirmasi Password Baru -->
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1.5">Konfirmasi
+                        Password Baru</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400 text-sm">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                        <input type="password" id="confirm-new-password" placeholder="••••••••"
+                            class="w-full bg-slate-50 border border-slate-200/80 text-sm rounded-xl pl-10 pr-10 py-2.5 text-gray-700 placeholder-gray-400/80 focus:outline-none focus:ring-2 focus:ring-[#1c4532] focus:bg-white transition-all font-medium">
+                        <span onclick="togglePasswordVisibility('confirm-new-password', this)"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 text-sm cursor-pointer hover:text-gray-600">
+                            <i class="fa-regular fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="toggleCredentialsForm(false)"
+                        class="w-1/3 bg-slate-100 hover:bg-slate-200 text-gray-600 font-bold rounded-xl py-3 text-xs transition-all duration-200">
+                        Batal
+                    </button>
+                    <button onclick="changeCredentials()"
+                        class="w-2/3 bg-[#113222] hover:bg-[#19402c] text-white font-bold rounded-xl py-3 text-xs shadow-lg shadow-emerald-950/10 flex items-center justify-center gap-1.5 transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0">
+                        Simpan Perubahan <i class="fa-solid fa-check text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center mt-8 pt-6 border-t border-slate-100">
+                <span class="text-xs font-semibold text-gray-400">New to the system?</span>
+                <div class="mt-2">
+                    <a href="#"
+                        class="text-[9px] font-bold text-gray-800 hover:text-emerald-700 tracking-wider uppercase font-mono border-b border-gray-800 pb-0.5">Contact
+                        Site Administrator</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Decoration Gradient Blobs -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-[#8cedaf]/10 rounded-full blur-3xl -z-10"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-emerald-700/5 rounded-full blur-3xl -z-10"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
